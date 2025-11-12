@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking Booking Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            padding: 8px;
+            margin: 10px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .total {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Parking Payment Form</h2>
+    
+    <label for="date">Select Date:</label>
+    <input type="date" id="date">
+    
+    <label for="startTime">Start Time:</label>
+    <input type="time" id="startTime">
+    
+    <label for="endTime">End Time:</label>
+    <input type="time" id="endTime" onchange="calculatePayment()">
+    
+    <label for="hours">Enter Hours of Parking:</label>
+    <input type="number" id="hours" min="1" value="1" />
+    
+    <div class="total">
+        Total Payment: <span id="totalAmount">50</span> Rupees
+    </div>
+    
+    <button class="btn" onclick="proceedToPayment()">Proceed to Payment</button>
+</div>
+
+<script>
+ // Function to calculate the total payment based on hours
+ function calculatePayment() {
+    var hours = document.getElementById('hours').value;
+    var pricePerHour = 50; // Fixed price per hour
+
+    // Calculate total
+    var total = pricePerHour * hours;
+
+    // Update the total in the HTML
+    document.getElementById('totalAmount').innerText = total;
+}
+
+// Update the payment amount when hours change
+document.getElementById('hours').addEventListener('input', calculatePayment);
+
+// Redirect to payment gateway (simulating PhonePe integration)
+function proceedToPayment() {
+    var totalAmount = document.getElementById('totalAmount').innerText;
+    
+    // Simulate the PhonePe payment redirect
+    var paymentUrl = `https://www.phonepe.com/payment?amount=${totalAmount}`;
+    
+    // Redirect user to the payment page (PhonePe in this case)
+    window.location.href = paymentUrl;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking Slot Booking with Date & Time</title>
+    <style>
+        /* Adding background animation for a subtle motion effect */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg, #2196F3, #FF9800);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Styling the container */
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .instructions {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .summary p {
+            margin: 5px 0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Parking Slot Booking</h1>
+        <form id="bookingForm">
+            <div class="form-group">
+                <label for="date">Select Date:</label>
+                <input type="date" id="date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="startTime">Start Time:</label>
+                <input type="time" id="startTime" required>
+            </div>
+
+            <div class="form-group">
+                <label for="endTime">End Time:</label>
+                <input type="time" id="endTime" required>
+            </div>
+
+            <button type="button" onclick="calculatePayment()">Book Now</button>
+        </form>
+
+        <div class="summary" id="summary" style="display: none;">
+            <h2>Booking Summary</h2>
+            <p id="summaryDate"></p>
+            <p id="summaryTime"></p>
+            <p id="summaryCost"></p>
+            <div class="form-group">
+                <label for="paymentMethod">Select Payment Method:</label>
+                <select id="paymentMethod" required>
+                    <option value="credit">Credit Card</option>
+                    <option value="debit">Debit Card</option>
+                    <option value="upi">UPI</option>
+                    <option value="cash">Cash</option>
+                </select>
+            </div>
+            <button type="button" onclick="showFinalAmount()">Proceed to Payment</button>
+            <p id="finalAmount" style="display: none; font-weight: bold; margin-top: 10px;"></p>
+        </div>
+
+        <p class="instructions">Fill in the details and click "Book Now" to confirm your booking.</p>
+    </div>
+
+    <script>
+        let totalCost = 0;
+        
+        function calculatePayment() {
+            const date = document.getElementById('date').value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+
+            if (!date || !startTime || !endTime) {
+                alert('Please fill all fields.');
+                return;
+            }
+
+            const start = new Date(`1970-01-01T${startTime}:00`);
+            const end = new Date(`1970-01-01T${endTime}:00`);
+
+            if (end <= start) {
+                alert('End time must be after start time.');
+                return;
+            }
+
+            const hours = Math.abs(end - start) / (1000 * 60 * 60);
+            
+            if (hours <= 1) {
+                totalCost = 50;
+            } else if (hours <= 2) {
+                totalCost = 100;
+            } else if (hours <= 3) {
+                totalCost = 150;
+            } else {
+                totalCost = 200;
+            }
+
+            document.getElementById('summaryDate').innerText = `Date: ${date}`;
+            document.getElementById('summaryTime').innerText = `Time: ${startTime} - ${endTime}`;
+            document.getElementById('summaryCost').innerText = `Total Cost: ₹${totalCost}`;
+
+            document.getElementById('summary').style.display = 'block';
+        }
+
+        function showFinalAmount() {
+            document.getElementById('finalAmount').innerText = `Final Amount to be Paid: ₹${totalCost}`;
+            document.getElementById('finalAmount').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
